@@ -1,5 +1,5 @@
 # Veterinaria_Backend
-backend de la veterinaria con springboot
+backend de la veterinaria con springboot y postgresql
 
 Integrantes:
 -Felipe Droguett
