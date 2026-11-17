@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 /**
@@ -121,6 +122,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return build(HttpStatus.UNAUTHORIZED, "Autenticación requerida", request, null);
     }
 
+    @ExceptionHandler(ResponseStatusException.class)
+    public ResponseEntity<ApiErrorDto> handleResponseStatusException(
+            ResponseStatusException ex, HttpServletRequest request) {
+        // Esto fuerza a usar tu mensaje personalizado ("Credenciales inválidas")
+        return build(HttpStatus.valueOf(ex.getStatusCode().value()), ex.getReason(), request, null);
+    }
+
     // ---------- Cualquier otra cosa = bug real (500) ----------
 
     @ExceptionHandler(Exception.class)
@@ -140,8 +148,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             WebRequest request) {
         String path = pathOf(request);
         String message = body instanceof ProblemDetail problem && problem.getDetail() != null
-                ? problem.getDetail()
-                : null;
+            ? problem.getDetail()
+            : (ex instanceof ResponseStatusException rse ? rse.getReason() : null);
 
         if (statusCode.is5xxServerError()) {
             log.error("Error {} procesando {}", statusCode.value(), path, ex);
