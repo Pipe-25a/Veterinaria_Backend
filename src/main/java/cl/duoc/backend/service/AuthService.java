@@ -3,7 +3,9 @@ package cl.duoc.backend.service;
 import cl.duoc.backend.dto.AuthResponseDto;
 import cl.duoc.backend.dto.LoginRequestDto;
 import cl.duoc.backend.dto.RegisterRequestDto;
+import cl.duoc.backend.entity.Role;
 import cl.duoc.backend.entity.User;
+import cl.duoc.backend.repository.RoleRepository;
 import cl.duoc.backend.repository.UserRepository;
 import java.time.Instant;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,7 @@ import org.springframework.web.server.ResponseStatusException;
 @RequiredArgsConstructor
 public class AuthService {
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository; 
     private final PasswordEncoder passwordEncoder;
     private final JwtEncoder jwtEncoder;
 
@@ -39,6 +42,13 @@ public class AuthService {
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setActive(true);
+
+        //  ASIGNACIÓN DEL ROL POR DEFECTO (por el servidor)
+        Role defaultRole = roleRepository.findByName("CLIENTE")
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.INTERNAL_SERVER_ERROR,
+                        "Rol por defecto 'CLIENTE' no configurado en la base de datos"));
+        user.setRole(defaultRole);
 
         return createToken(userRepository.save(user));
     }
@@ -59,6 +69,10 @@ public class AuthService {
                 .issuedAt(issuedAt)
                 .expiresAt(issuedAt.plusSeconds(expirationSeconds))
                 .claim("username", user.getUsername())
+                //  Mejora opcional: incluir rol en el JWT para usar @PreAuthorize
+                .claim("roles", user.getRole() == null
+                        ? java.util.List.of()
+                        : java.util.List.of(user.getRole().getName()))
                 .build();
         String token = jwtEncoder.encode(JwtEncoderParameters.from(
                 JwsHeader.with(MacAlgorithm.HS256).build(), claims)).getTokenValue();
