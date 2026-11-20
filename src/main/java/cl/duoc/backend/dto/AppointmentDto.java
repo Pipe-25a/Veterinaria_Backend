@@ -14,5 +14,5 @@ public class AppointmentDto {
     private String userId;
     private String serviceId;
     private LocalDateTime scheduledAt;
-    private String status;
+    private String statusId;
 }

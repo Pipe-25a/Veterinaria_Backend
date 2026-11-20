@@ -14,7 +14,7 @@ import org.springframework.http.HttpStatus;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
 public class UserController extends AbstractCrudController<User, UserDto> {
     private final UserRepository userRepository;

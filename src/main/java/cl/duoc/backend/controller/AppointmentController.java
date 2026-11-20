@@ -15,15 +15,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import lombok.RequiredArgsConstructor;
+import cl.duoc.backend.entity.AppointmentStatus;
+import cl.duoc.backend.repository.AppointmentStatusRepository;
 
 @RestController
-@RequestMapping("/api/appointments")
+@RequestMapping("/api/v1/appointments")
 @RequiredArgsConstructor
 public class AppointmentController extends AbstractCrudController<Appointment, AppointmentDto> {
     private final AppointmentRepository appointmentRepository;
     private final PetRepository petRepository;
     private final UserRepository userRepository;
     private final VeterinaryServiceRepository serviceRepository;
+    private final AppointmentStatusRepository statusRepository;
 
     @Override
     protected JpaRepository<Appointment, String> repository() {
@@ -38,7 +41,7 @@ public class AppointmentController extends AbstractCrudController<Appointment, A
         dto.setUserId(entity.getUser() == null ? null : entity.getUser().getIdUser());
         dto.setServiceId(entity.getService() == null ? null : entity.getService().getIdService());
         dto.setScheduledAt(entity.getScheduledAt());
-        dto.setStatus(entity.getStatus());
+        dto.setStatusId(entity.getStatus() == null ? null : entity.getStatus().getIdAppointmentStatus());
         return dto;
     }
 
@@ -55,7 +58,10 @@ public class AppointmentController extends AbstractCrudController<Appointment, A
         entity.setUser(findUser(dto.getUserId()));
         entity.setService(findService(dto.getServiceId()));
         entity.setScheduledAt(dto.getScheduledAt());
-        entity.setStatus(dto.getStatus());
+        entity.setStatus(dto.getStatusId() == null ? null
+                : statusRepository.findById(dto.getStatusId())
+                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                                "Estado de cita no encontrado")));
     }
 
     private Pet findPet(String petId) {
