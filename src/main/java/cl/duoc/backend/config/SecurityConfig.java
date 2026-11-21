@@ -14,12 +14,12 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
         private final RestAuthenticationEntryPoint authenticationEntryPoint;
         private final RestAccessDeniedHandler accessDeniedHandler;
-        private final JwtRoleConverter jwtRoleConverter; // 👈 NUEVO
+        private final JwtRoleConverter jwtRoleConverter; 
 
         public SecurityConfig(
                         RestAuthenticationEntryPoint authenticationEntryPoint,
                         RestAccessDeniedHandler accessDeniedHandler,
-                        JwtRoleConverter jwtRoleConverter) { // 👈 NUEVO
+                        JwtRoleConverter jwtRoleConverter) { 
                 this.authenticationEntryPoint = authenticationEntryPoint;
                 this.accessDeniedHandler = accessDeniedHandler;
                 this.jwtRoleConverter = jwtRoleConverter;
@@ -33,9 +33,9 @@ public class SecurityConfig {
                                 .sessionManagement(session -> session
                                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                                 .authorizeHttpRequests(authorize -> authorize
-                                                .requestMatchers("/api/auth/**").permitAll()
+                                                .requestMatchers("/api/v1/auth/**").permitAll()
 
-                                                // 👇 RESTRICCIÓN POR ROL: Solo ADMIN puede tocar usuarios y roles
+                                                //  RESTRICCIÓN POR ROL: Solo ADMIN puede tocar usuarios y roles
                                                 .requestMatchers("/api/v1/users/**", "/api/v1/roles/**")
                                                 .hasRole("ADMIN")
 

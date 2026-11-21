@@ -12,7 +12,7 @@ import org.springframework.web.server.ResponseStatusException;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/attentions")
+@RequestMapping("/api/v1/attentions")
 @RequiredArgsConstructor
 public class AttentionController extends AbstractCrudController<Attention, AttentionDto> {
     private final AttentionRepository attentionRepository;

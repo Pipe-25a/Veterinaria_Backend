@@ -13,7 +13,7 @@ import org.springframework.web.server.ResponseStatusException;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/medicines")
+@RequestMapping("/api/v1/medicines")
 @RequiredArgsConstructor
 public class MedicineController extends AbstractCrudController<Medicine, MedicineDto> {
     private final MedicineRepository medicineRepository;

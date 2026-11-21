@@ -13,7 +13,7 @@ import org.springframework.web.server.ResponseStatusException;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/services")
+@RequestMapping("/api/v1/services")
 @RequiredArgsConstructor
 public class VeterinaryServiceController extends AbstractCrudController<VeterinaryService, VeterinaryServiceDto> {
     private final VeterinaryServiceRepository serviceRepository;
