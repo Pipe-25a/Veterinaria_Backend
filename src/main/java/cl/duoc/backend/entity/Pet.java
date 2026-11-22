@@ -23,6 +23,10 @@ public class Pet {
 
     private String name;
 
+    private String species;
+    private String breed; 
+    private Integer age; 
+
     @ManyToOne
     @JoinColumn(name = "owner_id")
     private User owner;

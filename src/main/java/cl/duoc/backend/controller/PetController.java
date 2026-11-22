@@ -29,6 +29,9 @@ public class PetController extends AbstractCrudController<Pet, PetDto> {
         dto.setIdPet(entity.getIdPet());
         dto.setName(entity.getName());
         dto.setOwnerId(entity.getOwner() == null ? null : entity.getOwner().getIdUser());
+        dto.setSpecies(entity.getSpecies());
+        dto.setBreed(entity.getBreed());
+        dto.setAge(entity.getAge());
         return dto;
     }
 
@@ -42,8 +45,12 @@ public class PetController extends AbstractCrudController<Pet, PetDto> {
     @Override
     protected void updateEntity(Pet entity, PetDto dto) {
         entity.setName(dto.getName());
-        entity.setOwner(dto.getOwnerId() == null ? null : userRepository.findById(dto.getOwnerId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Dueño no encontrado")));
+        entity.setOwner(dto.getOwnerId() == null ? null
+                : userRepository.findById(dto.getOwnerId())
+                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Dueño no encontrado")));
+        entity.setSpecies(dto.getSpecies());
+        entity.setBreed(dto.getBreed());
+        entity.setAge(dto.getAge());
     }
 
     @Override

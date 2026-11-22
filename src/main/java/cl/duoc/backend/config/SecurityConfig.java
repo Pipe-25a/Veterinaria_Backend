@@ -35,6 +35,12 @@ public class SecurityConfig {
                                 .authorizeHttpRequests(authorize -> authorize
                                                 .requestMatchers("/api/v1/auth/**").permitAll()
 
+                                                .requestMatchers(
+                                                                "/v3/api-docs/**",
+                                                                "/swagger-ui/**",
+                                                                "/swagger-ui.html")
+                                                .permitAll()
+
                                                 //  RESTRICCIÓN POR ROL: Solo ADMIN puede tocar usuarios y roles
                                                 .requestMatchers("/api/v1/users/**", "/api/v1/roles/**")
                                                 .hasRole("ADMIN")
