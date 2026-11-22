@@ -12,7 +12,7 @@ import org.springframework.web.server.ResponseStatusException;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/pets")
+@RequestMapping("/api/v1/pets")
 @RequiredArgsConstructor
 public class PetController extends AbstractCrudController<Pet, PetDto> {
     private final PetRepository petRepository;

@@ -36,5 +36,7 @@ public class Appointment {
 
     private LocalDateTime scheduledAt;
 
-    private String status;
+    @ManyToOne
+    @JoinColumn(name = "status_id")
+    private AppointmentStatus status;
 }

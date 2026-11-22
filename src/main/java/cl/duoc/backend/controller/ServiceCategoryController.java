@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/service-categories")
+@RequestMapping("/api/v1/service-categories")
 @RequiredArgsConstructor
 public class ServiceCategoryController extends AbstractCrudController<ServiceCategory, ServiceCategoryDto> {
     private final ServiceCategoryRepository categoryRepository;
