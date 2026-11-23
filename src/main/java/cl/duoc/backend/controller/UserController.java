@@ -70,7 +70,20 @@ public class UserController extends AbstractCrudController<User, UserDto> {
             entity.setActive(dto.getActive());
         }
 
-        entity.setRole(findRole(dto.getRoleId()));
+        // LÓGICA DEL ROL MODIFICADA:
+        if (dto.getRoleId() != null && !dto.getRoleId().isBlank()) {
+            // Si el frontend envía un rol, lo asignamos
+            entity.setRole(findRole(dto.getRoleId()));
+        } else if (entity.getRole() == null) {
+            // Si no envían rol y el usuario es nuevo (no tiene rol), asignamos CLIENTE por
+            // defecto
+            Role defaultRole = roleRepository.findByName("CLIENTE")
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,
+                            "Rol CLIENTE no configurado"));
+            entity.setRole(defaultRole);
+        }
+        // Si entity.getRole() ya tenía un rol y no envían uno nuevo, se mantiene el que
+        // tenía.
     }
 
     /**
